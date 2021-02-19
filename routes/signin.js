@@ -1,0 +1,40 @@
+var express = require("express");
+var router = express.Router();
+var db = require("../bin/db");
+var bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
+
+router.post('/', (req, res, next) => {
+    const sql = `SELECT * FROM users WHERE username = ${db.escape(req.body.username)};`;
+    
+    db.query(sql, (err, result)=>{
+        if(err){
+            return res.status(400).send({msg: err});
+        }
+        if(!result.length){
+            return res.status(401).send({msg: "Username or password incorrect!"});
+        };
+
+        bcrypt.compare(req.body.password, result[0].password, (bErr, bResult) => {
+            if(bErr){
+                return res.status(401).send({msg: "Username or password incorrect!"});
+            }
+            if(bResult) {
+                const token = jwt.sign({
+                    username: result[0]['username'],
+                    userId: result[0].id},
+                    'SECRETKEY',{
+                        expiresIn: '1h'
+                    }
+                );
+
+                db.query(`UPDATE users SET last_login = now() WHERE id = '${result[0].id}'`);
+                
+                return res.status(200).send({msg: "logged in!", token, user: result[0]});
+            }
+            return res.status(401).send({msg: "Username or password incorrect!"});
+        });
+    });
+});
+
+module.exports = router;
