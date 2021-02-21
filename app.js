@@ -9,7 +9,6 @@ var usersRouter = require("./routes/users");
 var signUpRouter = require("./routes/signup");
 var signInRouter = require("./routes/signin");
 var postRouter = require("./routes/post");
-var secretRouter = require("./routes/secret");
 
 var app = express();
 
@@ -28,7 +27,6 @@ app.use("/users", usersRouter);
 app.use("/signup", signUpRouter);
 app.use("/signin", signInRouter);
 app.use("/post", postRouter);
-app.use("/secret", secretRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
