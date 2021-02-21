@@ -1,0 +1,35 @@
+/signup 
+	(post):
+	--> creates new user if username does not already exists
+    - requires:
+		- username: min. 5 chars
+		- password: min. 6 chars
+		- password_repeat: password
+		- email
+		
+/signin 
+	(post):
+	- requires:
+		- username
+		- password
+	- returns:
+		- token
+
+/post 
+	(get: '/username'):
+	- requires:
+		- token --> must be owner or accepted follower
+	- returns:
+		- all posts from 'username'
+		
+	(post):
+	- requires:
+		- token
+		- heading
+		- content
+		(later: img or video)
+	
+	
+	
+
+        
