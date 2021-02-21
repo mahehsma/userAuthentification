@@ -11,7 +11,6 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res, next) => {
-  console.log(req.body);
   const sql = `SELECT * FROM users WHERE username = ${db.escape(
     req.body.username
   )};`;
